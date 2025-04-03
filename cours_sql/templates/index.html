@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Cours</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Liste des Cours</h1>
+        <ul class="list-group mt-3">
+            {% for cours in courses %}
+                <li class="list-group-item">
+                    <a href="{{ url_for('cours_sql.cours', cours_id=cours['id']) }}">
+                        {{ cours['nom'] }} - {{ cours['date_debut'] }} à {{ cours['heure_debut'] }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

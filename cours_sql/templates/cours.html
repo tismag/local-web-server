@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ cours['nom'] }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">{{ cours['nom'] }}</h1>
+        <p><strong>Description :</strong> {{ cours['description'] }}</p>
+        <p><strong>Durée :</strong> {{ cours['duree'] }} heures</p>
+        <p><strong>Lieu :</strong> {{ cours['lieu'] }}</p>
+        
+        <h2>Étudiants inscrits :</h2>
+        <ul class="list-group">
+            {% for student in students %}
+                <li class="list-group-item">{{ student['nom'] }} {{ student['prenom'] }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('cours_sql.index') }}" class="btn btn-primary mt-3">Retour à la liste des cours</a>
+    </div>
+</body>
+</html>
