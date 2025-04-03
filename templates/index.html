@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <title>Météo Grenoble</title>
+</head>
+<body>
+    <div class="weather-container">
+        <h1>Météo à Grenoble</h1>
+        {% if weather %}
+            <p>🌡 Température : {{ weather.temperature }}°C</p>
+            <p>🌬 Vent : {{ weather.windspeed }} km/h</p>
+            <p>🌤 Code météo : {{ weather.weathercode }}</p>
+        {% else %}
+            <p>❌ Impossible de récupérer les données météo.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
