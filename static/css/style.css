@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #a8e6a2; /* fond vert doux */
+    background-image: url('../images/dino_pattern.png');
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    color: #333;
+    text-align: center;
+}
+
+.weather-container {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+}
+
+.weather-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2a5d31;
+    margin-bottom: 20px;
+}
+
+.weather-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+.weather-table th, .weather-table td {
+    border: 1px solid #999;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.weather-table th {
+    background-color: rgba(42,93,49,0.2);
+    font-weight: 600;
+}
+
+.weather-table tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.6);
+}

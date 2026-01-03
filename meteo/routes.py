@@ -5,61 +5,48 @@ import requests
 
 LAT, LON = 45.1765, 5.7364
 
-# URL Open-Meteo pour daily et hourly forecast (2 jours)
+# Récupérer les données hourly (toutes les infos possibles)
 URL = (
     f"https://api.open-meteo.com/v1/forecast?"
     f"latitude={LAT}&longitude={LON}&"
-    f"daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,"
-    f"precipitation_sum,weathercode,sunrise,sunset,windspeed_10m_max&"
     f"hourly=temperature_2m,apparent_temperature,precipitation,weathercode,cloudcover,windspeed_10m&"
     f"timezone=Europe/Paris&forecast_days=7"
 )
 
-# Mapper les jours de la semaine en français
 jours_fr = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
 
 @meteo_bp.route('/')
 def index():
     response = requests.get(URL)
     data = response.json()
-
-    # Séparer daily et hourly si présents
-    daily = data.get("daily", {})
     hourly = data.get("hourly", {})
+    
+    # --- Filtrage horaires ---
+    filt_heures = [7, 12, 18]  # heures clés pour prochains jours
+    hourly_filtered = {k: [] for k in hourly if k != "time"}
+    heures_affichees = []
+    jours_affiche = []
 
-    # Current weather si disponible
-    current = data.get("current_weather", None)
+    now = datetime.now()
 
-    # Convertir les dates daily en français
-    if daily.get("time"):
-        daily["jours"] = []
-        for t in daily["time"]:
-            dt = datetime.fromisoformat(t)
-            day_name = jours_fr[dt.weekday()]
-            daily["jours"].append(f"{day_name} {dt.day}/{dt.month}")
+    for i, t in enumerate(hourly["time"]):
+        dt = datetime.fromisoformat(t)
 
-    if hourly.get("time"):
-        filt_heures = [0, 6, 12, 18]  # heures à garder
-        hourly_filtered = {k: [] for k in hourly if k != "time"}  # exclure "time"
-        heures = []  # pour afficher dans le template
+        # 1️⃣ Heures restantes aujourd’hui
+        if dt.date() == now.date() and dt.hour >= now.hour:
+            for key in hourly_filtered:
+                hourly_filtered[key].append(hourly[key][i])
+            heures_affichees.append(dt.strftime("%H:%M"))
+            jours_affiche.append(f"Aujourd'hui")
 
-        for i, t in enumerate(hourly["time"]):
-            dt = datetime.fromisoformat(t)
-            if dt.hour in filt_heures:
-                for key in hourly_filtered:
-                    hourly_filtered[key].append(hourly[key][i])
-                heures.append(dt.strftime("%H:%M"))
+        # 2️⃣ Heures clés pour les prochains jours
+        elif dt.hour in filt_heures and dt.date() != now.date():
+            for key in hourly_filtered:
+                hourly_filtered[key].append(hourly[key][i])
+            heures_affichees.append(dt.strftime("%H:%M"))
+            jours_affiche.append(f"{jours_fr[dt.weekday()]} {dt.day}/{dt.month}")
 
-        # remplacer hourly par la version filtrée et ajouter "heures" pour le template
-        hourly = hourly_filtered
-        hourly["heures"] = heures
+    hourly_filtered["heures"] = heures_affichees
+    hourly_filtered["jours"] = jours_affiche
 
-
-    # Construire un dict facile à utiliser dans le template
-    weather = {
-        "current": current,
-        "daily": daily,
-        "hourly": hourly
-    }
-
-    return render_template('index.html', weather=weather)
+    return render_template("meteo/index.html", weather=hourly_filtered)

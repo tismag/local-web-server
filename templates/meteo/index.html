@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('meteo.static', filename='css/style.css') }}">
+    <title>Météo Grenoble</title>
+</head>
+<body>
+    <div class="weather-container">
+        <h1 class="weather-title">Météo à Grenoble</h1>
+
+        {% if weather.heures %}
+        <table class="weather-table">
+            <thead>
+                <tr>
+                    <th>Jour</th>
+                    <th>Heure</th>
+                    <th>Temp°</th>
+                    <th>Temp Apparente°</th>
+                    <th>Nuages %</th>
+                    <th>Vent km/h</th>
+                    <th>Pluie mm</th>
+                    <th>Code météo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(weather.heures|length) %}
+                <tr>
+                    <td>{{ weather.jours[i] }}</td>
+                    <td>{{ weather.heures[i] }}</td>
+                    <td>{{ weather.temperature_2m[i] }}</td>
+                    <td>{{ weather.apparent_temperature[i] }}</td>
+                    <td>{{ weather.cloudcover[i] }}</td>
+                    <td>{{ weather.windspeed_10m[i] }}</td>
+                    <td>{{ weather.precipitation[i] }}</td>
+                    <td>{{ weather.weathercode[i] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>❌ Impossible de récupérer les données météo.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

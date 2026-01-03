@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Raspberry Pi – Menu principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #222;
+            color: #fff;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 300px;
+            margin: auto;
+        }
+
+        .menu a {
+            text-decoration: none;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .menu a:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🦖 Raspberry Pi – Dashboard</h1>
+
+    <div class="menu">
+        <a href="/meteo">🌤 Météo</a>
+        <a href="/cours">📘 Cours SQL</a>
+        <!-- ajoute ici d'autres projets -->
+    </div>
+
+</body>
+</html>
