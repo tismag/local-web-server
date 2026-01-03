@@ -3,18 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('meteo.static', filename= 'css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('meteo.static', filename='css/style.css') }}">
     <title>Météo Grenoble</title>
 </head>
 <body>
     <div class="weather-container">
-        <h1>Météo à Grenoble</h1>
-        {% if weather %}
-            <p>🌡 Température : {{ weather.temperature }}°C</p>
-            <p>🌬 Vent : {{ weather.windspeed }} km/h</p>
-            <p>🌤 Code météo : {{ weather.weathercode }}</p>
-        {% else %}
-            <p>❌ Impossible de récupérer les données météo.</p>
+        <h1 class="weather-title">Météo à Grenoble</h1>
+
+        {% if weather.current %}
+        <div class="section current-weather">
+            <h2 class="weather-title">🌡 Météo actuelle</h2>
+            <p class="weather-data">Température : {{ weather.current.temperature }}°C</p>
+            <p class="weather-data">Vent : {{ weather.current.windspeed }} km/h</p>
+            <p class="weather-data">Code météo : {{ weather.current.weathercode }}</p>
+            <p class="weather-data">Heure : {{ weather.current.time }}</p>
+        </div>
+        {% endif %}
+
+        {% if weather.daily %}
+        <div class="section daily-forecast">
+            <h2 class="weather-title">📅 Prévisions quotidiennes</h2>
+            {% for i in range(weather.daily.time|length) %}
+            <div class="forecast">
+                <p class="weather-data-title">{{ weather.daily.jours[i] }}</p>
+                <p class="weather-data">🌡 Max : {{ weather.daily.temperature_2m_max[i] }}°C / Min : {{ weather.daily.temperature_2m_min[i] }}°C</p>
+                <p class="weather-data">🌬 Vent Max : {{ weather.daily.windspeed_10m_max[i] }} km/h</p>
+                <p class="weather-data">☀️ Soleil : {{ weather.daily.sunrise[i] }} → {{ weather.daily.sunset[i] }}</p>
+                <p class="weather-data">🌧 Précipitations : {{ weather.daily.precipitation_sum[i] }} mm</p>
+                <p class="weather-data">🌤 Code météo : {{ weather.daily.weathercode[i] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if weather.hourly %}
+        <div class="section hourly-forecast">
+            <h2 class="weather-title">⏰ Prévisions horaires</h2>
+            {% for i in range(weather.hourly.time|length) %}
+            <div class="forecast">
+                <p class="weather-data">{{ weather.hourly.heures[i] }}</p>
+                <p class="weather-data">🌡 Température : {{ weather.hourly.temperature_2m[i] }}°C</p>
+                <p class="weather-data">🌡 Temp Apparente : {{ weather.hourly.apparent_temperature[i] }}°C</p>
+                <p class="weather-data">☁️ Couverture nuageuse : {{ weather.hourly.cloudcover[i] }}%</p>
+                <p class="weather-data">🌬 Vent : {{ weather.hourly.windspeed_10m[i] }} km/h</p>
+                <p class="weather-data">🌧 Précipitations : {{ weather.hourly.precipitation[i] }} mm</p>
+                <p class="weather-data">🌤 Code météo : {{ weather.hourly.weathercode[i] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if not weather.current and not weather.daily and not weather.hourly %}
+            <p class="weather-data">❌ Impossible de récupérer les données météo.</p>
         {% endif %}
     </div>
 </body>

@@ -25,6 +25,12 @@ body {
     color: #2a5d31; /* Vert plus foncé */
 }
 
+.weather-data-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: #3a6d41;
+}
+
 .weather-data {
     font-size: 18px;
     font-weight: 400;
