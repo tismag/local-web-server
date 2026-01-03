@@ -2,12 +2,12 @@
 
 from flask import Flask, render_template
 from meteo.routes import meteo_bp
-from cours_sql.routes import cours_sql_bp
+# from cours_sql.routes import cours_sql_bp
 
 app = Flask(__name__)
 
 app.register_blueprint(meteo_bp, url_prefix='/meteo')
-app.register_blueprint(cours_sql_bp, url_prefix='/cours')
+# app.register_blueprint(cours_sql_bp, url_prefix='/cours')
 
 @app.route("/")
 def index():

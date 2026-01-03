@@ -13,6 +13,48 @@ URL = (
     f"timezone=Europe/Paris&forecast_days=7"
 )
 
+# Associations code météo - description
+WEATHER_DESCRIPTIONS = {
+    0: "Ciel dégagé",
+    1: "Principalement dégagé",
+    2: "Partiellement nuageux",
+    3: "Couvert",
+
+    45: "Brouillard",
+    48: "Brouillard givrant",
+
+    51: "Bruine légère",
+    53: "Bruine modérée",
+    55: "Bruine dense",
+
+    56: "Bruine verglaçante légère",
+    57: "Bruine verglaçante dense",
+
+    61: "Pluie faible",
+    63: "Pluie modérée",
+    65: "Pluie forte",
+
+    66: "Pluie verglaçante légère",
+    67: "Pluie verglaçante forte",
+
+    71: "Neige faible",
+    73: "Neige modérée",
+    75: "Neige forte",
+    77: "Grains de neige",
+
+    80: "Averses faibles",
+    81: "Averses modérées",
+    82: "Averses violentes",
+
+    85: "Averses de neige faibles",
+    86: "Averses de neige fortes",
+
+    95: "Orage",
+    96: "Orage avec grêle légère",
+    99: "Orage avec grêle forte",
+}
+
+
 jours_fr = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
 
 @meteo_bp.route('/')
@@ -48,5 +90,15 @@ def index():
 
     hourly_filtered["heures"] = heures_affichees
     hourly_filtered["jours"] = jours_affiche
+
+    weather_desc = []
+
+    for code in hourly_filtered["weathercode"]:
+        weather_desc.append(
+            WEATHER_DESCRIPTIONS.get(code, "Conditions météo inconnues")
+        )
+
+    hourly_filtered["description"] = weather_desc
+
 
     return render_template("meteo/index.html", weather=hourly_filtered)
